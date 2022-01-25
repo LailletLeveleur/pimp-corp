@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 import { connectWallet, getCurrentWalletConnected, installMetaMaskMessage, addWalletListener } from "../Interactions/WalletInteractions.js";
 import { getGameContract, getMintableCharacters, mintCharacterNFT } from '../Interactions/ContractInteractions.js'
 import { transformCharacterData } from '../Interactions/Constant.js';
+import '../Mint/Mint.js';
 
 const Mint = (setUserNFTs) => {
 
     // State variables
     const [walletAddress, setWalletAddress] = useState("");
     const [mintableNFTs, setMintableNFTs] = useState("");
+    // const [userNFTs, setUserNFTs] = useState("");
 
     /** Lifecycle */
     // wallet connection
@@ -79,8 +81,10 @@ const Mint = (setUserNFTs) => {
         );
         try {
             const { contract, } = await getGameContract();
-            const characterNFT = await contract.getUserOwnedNFTs();
-            setUserNFTs(transformCharacterData(characterNFT));
+            const characterNFTs = await contract.getUserOwnedNFTs();
+            const updatedUserNFTs = characterNFTs.map((characterNFT) => transformCharacterData(characterNFT));
+
+            setUserNFTs(updatedUserNFTs);
         }
         catch (error) {
             console.error(error);
@@ -124,7 +128,6 @@ const Mint = (setUserNFTs) => {
                 </button>
                 <br></br>
                 {console.log('trying to render mintable characters')}
-                MY DUE IS PAID
                 <div className="character-grid">
                     {mintableNFTs.length}
                     {mintableNFTs && mintableNFTs.map((character, index) => { 
@@ -136,7 +139,7 @@ const Mint = (setUserNFTs) => {
                                 <p>INDEX: {character.index}</p>
                                 <p>ID: {character.id}</p>
                             </div>
-                            <img src={character.imageURI} alt={character.name} />
+                            <img className="character-image" src={character.imageURI} alt={character.name} />
                             <button
                                 type="button"
                                 className="character-mint-button"

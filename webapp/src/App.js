@@ -1,6 +1,7 @@
 import './App.css';
 import Mint from "./Mint/Mint";
-import { useEffect, useState } from "react";
+import PimpList from "./PimpList/PimpList";
+import { useState } from "react";
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
   return (
     <div className="App">
       <Mint setUserNFTs={setUserNFTs} />
+      <PimpList userNFTs={userNFTs} />
     </div>
   );
 }
