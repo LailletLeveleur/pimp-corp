@@ -48,12 +48,32 @@ export const getMintableCharacters = async () => {
 
         return {
             prototypeCharacters: prototypeCharacters,
+            status: "Ok"
+        }
+      } catch (error) {
+        console.error('Something went wrong fetching characters:', error);
+        return {
+            prototypeCharacters: [],
+            status: error
+        }
+      }
+}
+
+export const getUserNFTList = async () => {
+    try {        
+        const { contract, } = await getGameContract();
+        const characterNFTs = await contract.getUserOwnedNFTs();
+        const updatedUserNFTs = characterNFTs.map((characterNFT) => transformCharacterData(characterNFT));
+        // console.table(updatedUserNFTs);
+
+        return {
+            userNFTList: updatedUserNFTs,
             status: ""
         }
       } catch (error) {
         console.error('Something went wrong fetching characters:', error);
         return {
-            prototypeCharacters: "",
+            userNFTList: [],
             status: error
         }
       }

@@ -37,7 +37,12 @@
   }
 }
 
-.character-image {
+/* .character-image {
   height: 200px;
   width: 200px;
 }
+
+.grid-container {
+  display: grid;
+   display: inline-grid; 
+} */

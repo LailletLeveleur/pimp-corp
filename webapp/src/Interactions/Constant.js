@@ -14,4 +14,19 @@ const transformCharacterData = (characterData) => {
   };
 };
 
-export { CONTRACT_ADDRESS, RINKEBY_CHAIN_ID, transformCharacterData };
+const userNFTsWithIndex = (list) => {
+  return list.map((characterData, index) => {
+    return {
+        key: index,
+        name: characterData.name,
+        imageURI: characterData.imageURI,
+        hp: characterData.hp,
+        maxHp: characterData.maxHp,
+        charisma: characterData.charisma,
+        streetCred: characterData.streetCred,
+      }
+    }
+  )
+}
+
+export { CONTRACT_ADDRESS, RINKEBY_CHAIN_ID, transformCharacterData, userNFTsWithIndex };

@@ -5,17 +5,19 @@
  */
 import { useEffect, useState } from "react";
 import { connectWallet, getCurrentWalletConnected, installMetaMaskMessage, addWalletListener } from "../Interactions/WalletInteractions.js";
-import { getGameContract, getMintableCharacters, mintCharacterNFT } from '../Interactions/ContractInteractions.js'
-import { transformCharacterData } from '../Interactions/Constant.js';
+import { getGameContract, getMintableCharacters, mintCharacterNFT, getUserNFTList } from '../Interactions/ContractInteractions.js'
+import { transformCharacterData, userNFTsWithIndex } from '../Interactions/Constant.js';
 import '../Mint/Mint.js';
 
-const Mint = (setUserNFTs) => {
+function Mint({setUserNFTs, setCount}){
 
     // State variables
     const [walletAddress, setWalletAddress] = useState("");
     const [mintableNFTs, setMintableNFTs] = useState("");
-    // const [userNFTs, setUserNFTs] = useState("");
+    
 
+
+    
     /** Lifecycle */
     // wallet connection
     useEffect(async () => {
@@ -26,9 +28,11 @@ const Mint = (setUserNFTs) => {
             addWalletListener(setWalletAddress);
 
             console.log('address: ', address);
+            
         }
 
         process();
+        setCount(currentCount => currentCount + 1);
     }, []);
 
     // list of mintable characters
@@ -40,6 +44,7 @@ const Mint = (setUserNFTs) => {
             setMintableNFTs(prototypeCharacters);
 
             console.log('2. prototypeCharacters: ', prototypeCharacters);
+            setCount(currentCount => currentCount + 1);
         }
 
         process();
@@ -75,22 +80,15 @@ const Mint = (setUserNFTs) => {
         mintCharacterNFT(characterId);
     };
 
+    // devrait sans doute etre dans PimpList
     const onMintDone = async (sender, tokenId, characterIndex) => {
         console.log(
             `6. CharacterNFTMinted - sender: ${sender} tokenId: ${tokenId.toNumber()} characterIndex: ${characterIndex.toNumber()}`
         );
-        try {
-            const { contract, } = await getGameContract();
-            const characterNFTs = await contract.getUserOwnedNFTs();
-            const updatedUserNFTs = characterNFTs.map((characterNFT) => transformCharacterData(characterNFT));
 
-            setUserNFTs(updatedUserNFTs);
-        }
-        catch (error) {
-            console.error(error);
-        }
+        const response = await getUserNFTList();
+        setUserNFTs(userNFTsWithIndex(response.userNFTList));
     }
-
     /** Render */
     const renderMintableCharacters = () => {
         return mintableNFTs.map((character) => {
@@ -148,10 +146,7 @@ const Mint = (setUserNFTs) => {
                         </div>
                     }
                     )}
-                    {/* {mintableNFTs.map(function(c, i) {return <div>XYZ</div>})} */}
                 </div>
-
-
             </div>
         );
     }
