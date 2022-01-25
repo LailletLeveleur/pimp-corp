@@ -1,0 +1,10 @@
+
+----------------------------------------------------------------
+npx hardhat run scripts/deploy.js --network rinkeby
+Contract deployed to: 0x6e91b4D7f75139699C5628cfA2437A997431964B
+Minted NFT #1
+Minted NFT #2
+Minted NFT #3
+Minted NFT #4
+Done deploying and minting!
+----------------------------------------------------------------

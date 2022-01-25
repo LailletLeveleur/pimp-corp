@@ -1,0 +1,2 @@
+import getGameContract from './ContractInteractions';
+
