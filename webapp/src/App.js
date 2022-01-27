@@ -2,7 +2,6 @@ import './App.css';
 import Mint from "./Mint/Mint";
 import PimpList from "./PimpList/PimpList";
 import { useEffect, useState } from "react";
-// import Carousel from './Carousel/Carousel';
 import { getUserNFTList } from './Interactions/ContractInteractions.js'
 import {
   FlatList,
@@ -11,9 +10,11 @@ import {
   Text,
   StyleSheet,
   Image,
-  Button
+  Button,
+  ImageBackground
 } from "react-native";
 import { userNFTsWithIndex } from './Interactions/Constant.js';
+
 
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
     slideSubtitle: { fontSize: 18 },
 
     pagination: {
-      position: "absolute",
+      position: "relative",
       bottom: 8,
       width: "100%",
       justifyContent: "bottom",
@@ -71,72 +72,48 @@ function App() {
     setCount(currentCount => currentCount + 1);
   }
 
+  const backgroundImageSource = "http://img.over-blog-kiwi.com/1/18/22/61/20141011/ob_bab9dd_sin-city-a-dame-to-kill-for-marv-poste.jpg";
 
   return (
-    <div className="App">
-      <div class="grid-container">
-        <div class="grid-item">
-          <div><h3>MINTABLEs</h3></div>
-          <div>
-            <h1>{count}</h1>
-            <Mint setUserNFTs={setUserNFTs} setCount={setCount} />
-          </div>
-        </div>
-        <div class="grid-item">
-          UPDATE COUNT: {count}
-        </div>
-        <div class="grid-item">
-          SELECTED CHARACTERS:
-          <table>
-            <caption>Selected character</caption>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">HP</th>
-              <th scope="col">Max HP</th>
-            </tr>
-            {selectedCharacterList.map((i) => {
-              console.log(i);
-              const item = userNFTs[i];
-              return (
-                <tr>
-                  <th scope="row">{item.name}</th>
-                  <td>{item.hp}</td>
-                  <td>{item.maxHp}</td>
-                </tr>
-              )
-            })}
-          </table>
-
-        </div>
-        <div class="grid-item">
-          <div><h3>USER OWNED</h3></div>
-          <div>
-            {/* <View style={{ backgroundColor: "blue", flex: 0.3 }}> */}
-            <FlatList
-              data={userNFTs}
-              // data={slideList}
-              style={styles.carousel}
-              renderItem={({ item }) =>
-                <View style={styles.slide}>
-                  <Image source={{ uri: item.imageURI }} style={styles.slideImage}></Image>
-                  <Text style={styles.slideTitle}>{item.name}</Text>
-                  <Text style={styles.slideSubtitle}>{item.hp}</Text>
-                  <button id={item.key} className="character-mint-button" onClick={() => onSelectCharacter(item.key)}>Select for Fight</ button>
-                </View>}
-              pagingEnabled
-              horizontal
-              keyExtractor={(item) => item.key}
-              showsHorizontalScrollIndicator={false}
-              bounces={true}
-            />
-            {/* </View> */}
-
-          </div >
-
-        </div>
-      </div>
-    </div>
-  );
+    <ImageBackground source={backgroundImageSource} style={styles.image}>
+      <Text style={styles.text}>Child content</Text>
+      
+      <View style={styles.middle} >
+                <Image source={{
+                    uri: "webapp\public\dodolasaumur.gif"
+                }}
+                style={
+                    {
+                        width: 50,
+                        height: 50,
+                      }
+                }
+                ></Image>
+            </View>
+      <View>
+        <Mint setUserNFTs={setUserNFTs} setCount={setCount} />
+      </View>
+      <View>
+        <FlatList
+          data={userNFTs}
+          // data={slideList}
+          style={styles.carousel}
+          renderItem={({ item }) =>
+            <View style={styles.slide}>
+              <Image source={{ uri: item.imageURI }} style={styles.slideImage}></Image>
+              <Text style={styles.slideTitle}>{item.name}</Text>
+              <Text style={styles.slideSubtitle}>{item.hp}</Text>
+              <button id={item.key} className="character-mint-button" onClick={() => onSelectCharacter(item.key)}>Select for Fight</ button>
+            </View>}
+          pagingEnabled
+          horizontal
+          keyExtractor={(item) => item.key}
+          showsHorizontalScrollIndicator={false}
+          bounces={true}
+        />
+      </View>
+    </ImageBackground>
+  )
 }
 
 export default App

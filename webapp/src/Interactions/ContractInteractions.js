@@ -22,7 +22,7 @@ export const getGameContract = async () => {
             signer
         );
 
-        console.log('Contract found! ', contract);
+        // console.log('Contract found! ', contract);
         return {
             contract: contract,
             status: 'Ok'
@@ -45,7 +45,7 @@ export const getMintableCharacters = async () => {
         const prototypeCharacters = prototypeCharactersTxn.map((characterData) =>
           transformCharacterData(characterData)
         );
-
+        
         return {
             prototypeCharacters: prototypeCharacters,
             status: "Ok"

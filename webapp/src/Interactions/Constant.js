@@ -5,6 +5,7 @@ const RINKEBY_CHAIN_ID = ';'
  */
 const transformCharacterData = (characterData) => {
   return {
+    characterIndex: characterData.characterIndex.toNumber(), // the prototype used to create or the prototype ref itsef
     name: characterData.name,
     imageURI: characterData.imageURI,
     hp: characterData.hp.toNumber(),
@@ -18,6 +19,7 @@ const userNFTsWithIndex = (list) => {
   return list.map((characterData, index) => {
     return {
         key: index,
+        characterIndex: characterData.characterIndex,
         name: characterData.name,
         imageURI: characterData.imageURI,
         hp: characterData.hp,
@@ -29,4 +31,20 @@ const userNFTsWithIndex = (list) => {
   )
 }
 
-export { CONTRACT_ADDRESS, RINKEBY_CHAIN_ID, transformCharacterData, userNFTsWithIndex };
+const userNFTsWithIndexNoKey = (list) => {
+  return list.map((characterData, index) => {
+    return {
+        id: index,
+        characterIndex: characterData.characterIndex,
+        name: characterData.name,
+        imageURI: characterData.imageURI,
+        hp: characterData.hp,
+        maxHp: characterData.maxHp,
+        charisma: characterData.charisma,
+        streetCred: characterData.streetCred,
+      }
+    }
+  )
+}
+
+export { CONTRACT_ADDRESS, RINKEBY_CHAIN_ID, transformCharacterData, userNFTsWithIndex, userNFTsWithIndexNoKey };
