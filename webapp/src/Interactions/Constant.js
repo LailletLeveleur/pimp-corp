@@ -15,6 +15,17 @@ const transformCharacterData = (characterData) => {
   };
 };
 
+const transformCopData = (characterData) => {
+  console.log(characterData);
+  return { // the prototype used to create or the prototype ref itsef
+    name: characterData.name,
+    imageURI: characterData.imageURI,
+    hp: characterData.hp.toNumber(),
+    maxHp: characterData.maxHp.toNumber(),
+    streetCred: characterData.streetCred.toNumber(),
+  };
+};
+
 const userNFTsWithIndex = (list) => {
   return list.map((characterData, index) => {
     return {
@@ -47,4 +58,4 @@ const userNFTsWithIndexNoKey = (list) => {
   )
 }
 
-export { CONTRACT_ADDRESS, RINKEBY_CHAIN_ID, transformCharacterData, userNFTsWithIndex, userNFTsWithIndexNoKey };
+export { CONTRACT_ADDRESS, RINKEBY_CHAIN_ID, transformCharacterData, userNFTsWithIndex, userNFTsWithIndexNoKey, transformCopData };

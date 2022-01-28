@@ -76,7 +76,7 @@ function App() {
 
   return (
     <ImageBackground source={backgroundImageSource} style={styles.image}>
-      <Text style={styles.text}>Child content</Text>
+      {/* <Text style={styles.text}>Child content</Text> */}
       
       <View style={styles.middle} >
                 <Image source={{

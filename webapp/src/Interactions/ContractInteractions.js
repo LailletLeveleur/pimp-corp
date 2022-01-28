@@ -1,4 +1,4 @@
-import { CONTRACT_ADDRESS, transformCharacterData } from './Constant';
+import { CONTRACT_ADDRESS, transformCharacterData, transformCopData } from './Constant';
 import pimpGame from '../PimpGame.json';
 import { ethers } from 'ethers';
 
@@ -12,8 +12,8 @@ import { ethers } from 'ethers';
  */
 
 export const getGameContract = async () => {
-    
-    if (window.ethereum) { 
+
+    if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
@@ -39,28 +39,28 @@ export const getGameContract = async () => {
 export const getMintableCharacters = async () => {
     try {
         console.log('Getting contract characters to mint');
-        const {contract, status} = await getGameContract();             
+        const { contract, status } = await getGameContract();
         const prototypeCharactersTxn = await contract.getAllPrototypeCharacters();
         console.log('charactersTxn:', prototypeCharactersTxn);
         const prototypeCharacters = prototypeCharactersTxn.map((characterData) =>
-          transformCharacterData(characterData)
+            transformCharacterData(characterData)
         );
-        
+
         return {
             prototypeCharacters: prototypeCharacters,
             status: "Ok"
         }
-      } catch (error) {
+    } catch (error) {
         console.error('Something went wrong fetching characters:', error);
         return {
             prototypeCharacters: [],
             status: error
         }
-      }
+    }
 }
 
 export const getUserNFTList = async () => {
-    try {        
+    try {
         const { contract, } = await getGameContract();
         const characterNFTs = await contract.getUserOwnedNFTs();
         const updatedUserNFTs = characterNFTs.map((characterNFT) => transformCharacterData(characterNFT));
@@ -70,18 +70,18 @@ export const getUserNFTList = async () => {
             userNFTList: updatedUserNFTs,
             status: ""
         }
-      } catch (error) {
+    } catch (error) {
         console.error('Something went wrong fetching characters:', error);
         return {
             userNFTList: [],
             status: error
         }
-      }
+    }
 }
 
 export const mintCharacterNFT = async (characterId) => {
     try {
-        const {contract, status} = await getGameContract();
+        const { contract, status } = await getGameContract();
         console.log('Minting character in progress...');
         const mintTxn = await contract.mintCharacterNFT(characterId);
         await mintTxn.wait();
@@ -90,6 +90,27 @@ export const mintCharacterNFT = async (characterId) => {
             status: ""
         }
     } catch (error) {
-      console.warn('MintCharacterAction Error:', error);
+        console.warn('MintCharacterAction Error:', error);
     }
-  };
+};
+
+export const getCop = async () => {
+    try {
+        console.log('Getting cop The Boss');
+        const { contract, status } = await getGameContract();
+        const copTxn = await contract.getCop();
+        console.log('copTxn:', copTxn);
+        const copCharacter = transformCopData(copTxn);
+
+        return {
+            copCharacter: copCharacter,
+            status: "Ok"
+        }
+    } catch (error) {
+        console.error('Something went wrong fetching cop:', error);
+        return {
+            copCharacter: [],
+            status: error
+        }
+    }
+}

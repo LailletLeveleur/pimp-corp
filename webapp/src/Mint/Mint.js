@@ -278,19 +278,6 @@ function Mint({ setUserNFTs, setCount }) {
                     <View >
                         <WalletButton />
                     </View>
-
-
-
-                    {/* <View style={{ flexDirection: "row", height: 100, padding: 20 }}> */}
-                    {/* <VirtualizedList
-                    data={mintableNFTs}
-                    initialNumToRender={3}
-                    renderItem={({ item }) => <Item name={item.name} hp={item.hp} maxHp={item.maxHp} imageURI={item.imageURI} characterIndex={item.characterIndex} key={item.id} />}
-                    // keyExtractor={item => item.id}
-                    getItemCount={getItemCount}
-                    getItem={getItem}
-                /> */}
-
                 </View >
             </SafeAreaView>
         </View>
