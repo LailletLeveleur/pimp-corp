@@ -11,6 +11,7 @@ import { ethers } from 'ethers';
  * 
  */
 
+// put in setContext
 export const getGameContract = async () => {
 
     if (window.ethereum) {
