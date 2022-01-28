@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Number guessing game</title>
+
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+
+        body {
+            width: 50%;
+            max-width: 800px;
+            min-width: 480px;
+            margin: 0 auto;
+        }
+
+        .lastResult {
+            color: white;
+            padding: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Number guessing game</h1>
+
+    <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you
+        if your guess was too high or too low.</p>
+
+    <div class="form">
+        <label for="labelName">Ton nom ? </label>
+        <input type="text" id="userName" class="userName">
+        <input type="submit" value="createSubmit" class="createSubmit">
+    </div>
+
+    <div class="resultParas">
+        <p class="guesses"></p>
+        <p class="lastResult"></p>
+        <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let userName = document.querySelector('.userName');
+
+        const playerNames = [];
+        const poules = []
+        const renards = []
+        const viperes = []
+        var playerPoules = {};
+        var playerRenards = {};
+        var playerViperes = {};
+
+
+        function generateOneAnimal() {
+            let ran = randomNumber;
+
+            if (ran <= 33) return 1; // Poule
+            else if (ran <= 66) return 2; // Renard
+            else return 3; // Vipere
+        }
+
+        function generatePlayerAnimals(playerName) {
+            // on genre 20 elements par joueur
+            for (i in 20) {
+                let kind = generateOneAnimal();
+                if (kind == 1) {
+                    let id = poules.push("Poule" + i);
+                    if (playerName in playerPoules) {
+                        playerPoules[playerName].push(id);
+                    }
+                    else {
+                        playerPoules[playerName] = [id];
+                    }
+                }
+                else if (kind == 2) {
+                    let id = renards.push("Renard" + i);
+                    if (playerName in playerRenards) {
+                        playerRenards[playerName].push(id);
+                    }
+                    else {
+                        playerRenards[playerName] = [id];
+                    }
+                } else {
+                    let id = viperes.push("Renard" + i);
+                    if (playerName in playerViperes) {
+                        playerViperes[playerName].push(id);
+                    }
+                    else {
+                        playerViperes[playerName] = [id];
+                    }
+                }
+            }
+        }
+
+        function generate_table() {
+            // get the reference for the body
+            var body = document.getElementsByTagName("body")[0];
+
+            // creates a <table> element and a <tbody> element
+            var tbl = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+
+            // creating all cells
+            for (var i = 0; i < 2; i++) {
+                // creates a table row
+                var row = document.createElement("tr");
+                
+                for (var j = 0; j < 2; j++) {
+                    // Create a <td> element and a text node, make the text
+                    // node the contents of the <td>, and put the <td> at
+                    // the end of the table row
+                    var cell = document.createElement("td");
+                    var cellText = document.createTextNode("cell in row " + i + ", column " + j);
+                    cell.appendChild(cellText);
+                    row.appendChild(cell);
+                }
+
+
+
+                // add the row to the end of the table body
+                tblBody.appendChild(row);
+            }
+
+            // put the <tbody> in the <table>
+            tbl.appendChild(tblBody);
+            // appends <table> into <body>
+            body.appendChild(tbl);
+            // sets the border attribute of tbl to 2;
+            tbl.setAttribute("border", "2");
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,3 +1,5 @@
+const hre = require("hardhat");
+
 const main = async () => {
     const gameContractFactory = await hre.ethers.getContractFactory('PimpGame');
     const gameContract = await gameContractFactory.deploy(
@@ -69,6 +71,40 @@ const main = async () => {
     
 };
 
+const attackTest = async () => {
+    const gameContractFactory = await hre.ethers.getContractFactory('PimpGame');
+    const gameContract = await gameContractFactory.deploy(
+        ["German Pimp", "Black Pimp", "Lesbian scientist"],       // Names
+        ["https://i.imgur.com/Njlx6yT.jpeg", // Images
+        "https://i.imgur.com/XB9ykuO.jpeg",
+        "https://i.imgur.com/DFbJk4x.png"
+    ],
+        [250, 150, 500],                    // HP values
+        [150, 150, 50],                       // Charisma values
+        [200, 300, 50],                       // Street cred values
+        "Woke Me up before you gogo",
+        "https://www.rueducine.com/wp-content/uploads/2015/01/rueducine.com-les-ripoux-photo-5-300x197.jpg",
+        1000000,
+        20,
+    );
+    await gameContract.deployed();
+
+    const [owner, addr1, addr2, addr3] = await ethers.getSigners();
+
+    await gameContract.connect(addr1).mintCharacterNFT(0);
+    await gameContract.connect(addr1).mintCharacterNFT(1);
+    await gameContract.connect(addr1).mintCharacterNFT(2);
+    await gameContract.connect(addr2).mintCharacterNFT(1);
+    await gameContract.connect(addr3).mintCharacterNFT(2);
+
+    let txn;
+
+    // user 1 stack for raid  
+    let addr1NFTs = await gameContract.connect(addr1).getUserOwnedNFTs();  
+    await gameContract.connect(addr1).addToRaidPool(addr1NFTs);
+    await gameContract.connect(owner).raidFromPack();
+}
+
 const transformCharacterData = (characterData) => {
     return {
       name: characterData.name,
@@ -82,7 +118,7 @@ const transformCharacterData = (characterData) => {
 
 const runMain = async () => {
     try {
-        await main();
+        await attackTest();
         process.exit(0);
     } catch (error) {
         console.log(error);

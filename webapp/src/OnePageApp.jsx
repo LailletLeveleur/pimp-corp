@@ -25,7 +25,8 @@ import { connectWallet, getCurrentWalletConnected, installMetaMaskMessage } from
 /** APP ROOT :: START */
 function OnePageApp() {
 
-    const backgroundImageSource = "http://img.over-blog-kiwi.com/1/18/22/61/20141011/ob_bab9dd_sin-city-a-dame-to-kill-for-marv-poste.jpg";
+    const backgroundImageSource = "https://static.fnac-static.com/multimedia/Images/FR/NR/ee/7a/50/5274350/1507-1/tsp20190624101242/J-ai-tue-pour-elle.jpg";
+    // const backgroundImageSource = "http://img.over-blog-kiwi.com/1/18/22/61/20141011/ob_bab9dd_sin-city-a-dame-to-kill-for-marv-poste.jpg";
 
     return (
         <ImageBackground source={backgroundImageSource}>
@@ -177,7 +178,7 @@ function MintableCharacter({ name, hp, maxHp, imageURI, charisma, streetCred, ch
                 <Image source={{ uri: imageURI }} style={{ width: 100, height: 100 }} />
             </View>
             <View >
-                <Button onPress={() => onMintPressed(characterIndex)} title="Mint" />
+                <Button onPress={() => onMintPressed(characterIndex)} title="💸 Mint 💸" />
             </View>
         </View>
     )
@@ -212,9 +213,7 @@ function UserCharacters() {
             array.splice(index, 1);
             updateSelectedCharacterList(arr => array);
         }
-
         else updateSelectedCharacterList(arr => [...arr, key]);
-
     }
 
     function isAlreadySelected(key) {
