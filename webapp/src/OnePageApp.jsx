@@ -177,7 +177,7 @@ function MintableCharacter({ name, hp, maxHp, imageURI, charisma, streetCred, ch
                 <Image source={{ uri: imageURI }} style={{ width: 100, height: 100 }} />
             </View>
             <View >
-                <Button onPress={() => onMintPressed(() => characterIndex)} title="Mint" />
+                <Button onPress={() => onMintPressed(characterIndex)} title="Mint" />
             </View>
         </View>
     )
