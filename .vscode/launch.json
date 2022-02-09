@@ -1,0 +1,22 @@
+{
+    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+    // Pointez pour afficher la description des attributs existants.
+    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "Launch Firefox against localhost",
+            "url": "http://127.0.0.1:3000",
+            "reAttach": true,
+            "webRoot": "${workspaceFolder}",
+            "pathMappings": [
+                {
+                    "url": "file:///C:/Users/bigot/blockchain/pimp-corp/webapp/src",
+                    "path": "C:/Users/bigot/blockchain/pimp-corp/webapp/src"
+                }
+            ]
+        }
+    ]
+}

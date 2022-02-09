@@ -1,0 +1,18 @@
+#root {
+  font-family: "cursive";
+  background-color: "red";
+}
+
+body {
+    font-family: "cursive";
+    background-color: "red";
+  }
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 1000px;
+    font-family: "cursive";
+    background-color: "red";
+  }

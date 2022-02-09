@@ -1,7 +1,8 @@
 const hre = require("hardhat");
+require("hardhat-tracer");
 
 const main = async () => {
-    const gameContractFactory = await hre.ethers.getContractFactory('PimpGame');
+    const gameContractFactory = await hre.ethers.getContractFactory('./src/abi/contracts/PimpGame.sol/PimpGame');
     const gameContract = await gameContractFactory.deploy(
         ["German Pimp", "Black Pimp", "Lesbian scientist"],       // Names
         ["https://i.imgur.com/Njlx6yT.jpeg", // Images
@@ -90,6 +91,18 @@ const attackTest = async () => {
     await gameContract.deployed();
 
     const [owner, addr1, addr2, addr3] = await ethers.getSigners();
+    
+    console.log('contract', gameContract.address);
+    console.log('owner', owner.address);
+    console.log('addr1', addr1.address);
+    console.log('addr2', owner.address);
+    console.log('addr3', addr3.address);
+    
+    let balance;
+    balance = await gameContract.balanceOf(gameContract.address);
+    console.log('! contract balance', balance );
+    balance = await gameContract.balanceOf(owner.address);
+    console.log('! owner balance', balance );
 
     await gameContract.connect(addr1).mintCharacterNFT(0);
     await gameContract.connect(addr1).mintCharacterNFT(1);
@@ -98,11 +111,30 @@ const attackTest = async () => {
     await gameContract.connect(addr3).mintCharacterNFT(2);
 
     let txn;
+    // console.log('# owner');
+    // txn = await gameContract.connect(owner).getUserOwnedNFTs();
+    // console.log(txn);
+
+    // console.log('# addr1');
+    // txn = await gameContract.connect(addr1).getUserOwnedNFTs();
+    // console.log(txn)
+    // console.log('# addr2');
+
+    // txn = await gameContract.connect(addr2).getUserOwnedNFTs();
+    // console.log(txn)
+    // console.log('# addr3');
+
+    // txn = await gameContract.connect(addr3).getUserOwnedNFTs();
+    // console.log(txn)
 
     // user 1 stack for raid  
     let addr1NFTs = await gameContract.connect(addr1).getUserOwnedNFTs();  
-    await gameContract.connect(addr1).addToRaidPool(addr1NFTs);
-    await gameContract.connect(owner).raidFromPack();
+    console.table(addr1NFTs);
+    await gameContract.connect(addr1).addToAttackStackPool([1,2,3]);
+    await gameContract.connect(addr2).addToAttackStackPool([4]);
+    await gameContract.connect(addr3).addToAttackStackPool([5]);
+
+    await gameContract.connect(owner).allAttack();
 }
 
 const transformCharacterData = (characterData) => {

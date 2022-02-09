@@ -12,41 +12,53 @@
  * 
  * 
  */
-
+ import styled from 'styled-components';
 import { useEffect, useState } from "react";
 import {
-    Button, Image, ImageBackground, Text, View
+    Button, Image, ImageBackground, Text, View, Dimensions, StyleSheet
 } from "react-native";
 import { userNFTsWithIndexNoKey, userNFTsWithIndex, transformCopData } from "./Interactions/Constant";
-import { getGameContract, getMintableCharacters, mintCharacterNFT, getUserNFTList, getCop } from "./Interactions/ContractInteractions";
+import { getGameContract, getMintableCharacters, mintCharacterNFT, getUserNFTList, getCop, addToRaid } from "./Interactions/ContractInteractions";
 import { connectWallet, getCurrentWalletConnected, installMetaMaskMessage } from "./Interactions/WalletInteractions";
+import './OnePageApp.css'
 
 
 /** APP ROOT :: START */
 function OnePageApp() {
 
-    const backgroundImageSource = "https://static.fnac-static.com/multimedia/Images/FR/NR/ee/7a/50/5274350/1507-1/tsp20190624101242/J-ai-tue-pour-elle.jpg";
+    // const backgroundImageSource = "https://static.fnac-static.com/multimedia/Images/FR/NR/ee/7a/50/5274350/1507-1/tsp20190624101242/J-ai-tue-pour-elle.jpg";
     // const backgroundImageSource = "http://img.over-blog-kiwi.com/1/18/22/61/20141011/ob_bab9dd_sin-city-a-dame-to-kill-for-marv-poste.jpg";
+    const backgroundImageSource = "https://static.wikia.nocookie.net/sincity/images/2/2b/With_the_broads.jpg/revision/latest/scale-to-width-down/819?cb=20140118220525";
 
     return (
-        <ImageBackground source={backgroundImageSource}>
-            {/* Cop Boss */}
-            <View>
-                <CopCharacter />
+        // <ImageBackground source={backgroundImageSource}>
+            
+            <View className="app-container" style={
+                {display: "flex", flexDirection: "column", alignItems: "center",
+                 border: "dashed black", padding: 10, fontFamily: 'UPHeaval'}
+                }>
+                {/* Cop Boss */}
+                <View className="cop-container" style={{border: "dashed yellow"}}>
+                    <CopCharacter/>
+                </View>
+                {/* Connection Button */}
+                <View className="wallet-container" style={{border: "dashed red"}}>
+                    <ConnectWallet />
+                </View>
+                {/* Template characters */}
+                <View className="mint-container" style={{
+                    display: "flex", flexDirection: "column", justifyContent: "center",
+                    border: "dashed blue"}}>
+                    <Mint />
+                </View>
+                {/* User owned */}
+                <View className="user-owned-container" style={{
+                    display: "flex", flexDirection: "row",
+                    border: "dashed orange"}}>
+                    <UserCharacters className="user-characters-container" style={{border: "dashed green"}}/>
+                </View>
             </View>
-            {/* Connection Button */}
-            <View>
-                <ConnectWallet />
-            </View>
-            {/* Template characters */}
-            <View>
-                <Mint />
-            </View>
-            {/* User owned */}
-            <View>
-                <UserCharacters />
-            </View>
-        </ImageBackground>
+        // </ImageBackground>
     )
 }
 /** APP ROOT :: START */
@@ -207,13 +219,21 @@ function UserCharacters() {
     function onSelectCharacter(key) {
         console.log('update selected w/ ', key);
 
-        var array = [...selectedCharacterList];
-        var index = array.indexOf(key);
-        if (index !== -1) {
-            array.splice(index, 1);
-            updateSelectedCharacterList(arr => array);
+        async function process() {
+            const addToRaidTxn = await addToRaid(key);
+            await addToRaidTxn.wait();
+
+            var array = [...selectedCharacterList];
+            var index = array.indexOf(key);
+            if (index !== -1) {
+                array.splice(index, 1);
+                updateSelectedCharacterList(arr => array);
+            } else {
+                updateSelectedCharacterList(arr => [...arr, key]);
+            }
         }
-        else updateSelectedCharacterList(arr => [...arr, key]);
+
+        process();
     }
 
     function isAlreadySelected(key) {
@@ -263,14 +283,14 @@ function UserCharacter({ name, hp, maxHp, imageURI, charisma, streetCred, charac
         </View>
     )
 }
-/** HANDLE MINTABLE CHARACTERS :: END */
+/** HANDLE USER CHARACTERS :: END */
 
 
 
 
 
 /** HANDLE COP :: START */
-function CopCharacter(){
+function CopCharacter() {
     const [cop, setCop] = useState({});
 
     useEffect(() => {
@@ -302,9 +322,22 @@ function CopCharacter(){
             </View>
         </View>
     )
- 
+
 }
 /** HANDLE COP :: END */
 
+
+
+
+
+/** HANDLE Attack :: START */
+function Attack() {
+    
+    async function attack() {
+
+    }
+
+
+}
 
 export default OnePageApp

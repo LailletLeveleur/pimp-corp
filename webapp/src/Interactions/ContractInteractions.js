@@ -115,3 +115,23 @@ export const getCop = async () => {
         }
     }
 }
+
+export const addToRaid = async (characterId) => {
+    try {
+        const { contract, status } = await getGameContract();
+        console.log('Stacking character in progress...');
+        const addToRaidPoolTxn = await contract.prepareRaid(contract.address, characterId);
+        // await addToRaidPoolTxn.wait();
+        console.log('addToRaidPoolTxn:', addToRaidPoolTxn);
+        return {
+            response: characterId,
+            status: "Ok"
+        }
+    } catch (error) {
+        console.warn('addToRaid Error:', error);
+        return {
+            response: characterId,
+            status: error
+        }
+    }
+} 

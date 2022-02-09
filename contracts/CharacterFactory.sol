@@ -10,11 +10,11 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 // Helper functions OpenZeppelin provides.
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 import "./libraries/Base64.sol";
 
-contract CharacterFactory is ERC721 {
-
+abstract contract CharacterFactory is ERC721, IERC721Receiver {
     // using SafeMath for uint256;
 
     event CharacterNFTMinted(
@@ -54,7 +54,7 @@ contract CharacterFactory is ERC721 {
     // The tokenId is the NFTs unique identifier, it's just a number that goes
     // 0, 1, 2, 3, etc.
     using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    Counters.Counter internal tokenIDs;
 
     // The template for the characters to be minted
     CharacterAttributes[] prototypeCharacters;
@@ -67,63 +67,9 @@ contract CharacterFactory is ERC721 {
     // the boss to be fought
     Cop public cop;
 
-    constructor(
-        string[] memory characterNames,
-        string[] memory characterImageURIs,
-        uint256[] memory characterHp,
-        uint256[] memory characterCharisma,
-        uint256[] memory characterStreetCred,
-        string memory copName, // These new variables would be passed in via run.js or deploy.js.
-        string memory copImageURI,
-        uint256 copHp,
-        uint256 copStreetCred
-    ) ERC721("Pimps&Co", "PIMP") {
-        cop = Cop({
-            characterIndex: 1,
-            name: copName,
-            imageURI: copImageURI,
-            hp: copHp,
-            maxHp: copHp,
-            streetCred: copStreetCred
-        });
-
-        console.log(
-            "Done initializing %s w/ HP %s, img %s",
-            cop.name,
-            cop.hp,
-            cop.imageURI
-        );
-
-        // Loop through all the characters, and save their values in our contract so
-        // we can use them later when we mint our NFTs.
-        for (uint256 i = 0; i < characterNames.length; i += 1) {
-            prototypeCharacters.push(
-                CharacterAttributes({
-                    characterIndex: i,
-                    name: characterNames[i],
-                    imageURI: characterImageURIs[i],
-                    hp: characterHp[i],
-                    maxHp: characterHp[i],
-                    charisma: characterCharisma[i], // capacity to enroll whores
-                    streetCred: characterStreetCred[i] // capacity to not be stolen by other and better return on whores
-                })
-            );
-
-            CharacterAttributes memory c = prototypeCharacters[i];
-            console.log("-- Index", c.characterIndex);
-            console.log(
-                "   Done initializing %s w/ HP %s, img %s",
-                c.name,
-                c.hp,
-                c.imageURI
-            );
-        }
-        _tokenIds.increment(); // start to 1
-    }
-
     function mintCharacterNFT(uint256 _characterIndex) external {
         // Get current tokenId (starts at 1 since we incremented in the constructor).
-        uint256 newItemId = _tokenIds.current();
+        uint256 newItemId = tokenIDs.current();
 
         // The magical function! Assigns the tokenId to the caller's wallet address.
         _safeMint(msg.sender, newItemId);
@@ -153,7 +99,7 @@ contract CharacterFactory is ERC721 {
         pimpToOwner[newItemId] = msg.sender;
 
         // Increment the tokenId for the next person that uses it.
-        _tokenIds.increment();
+        tokenIDs.increment();
 
         emit CharacterNFTMinted(msg.sender, newItemId, _characterIndex);
     }
@@ -164,7 +110,8 @@ contract CharacterFactory is ERC721 {
         override
         returns (string memory)
     {
-        CharacterAttributes memory charAttributes = tokenIdToCharacterAttributes[_tokenId];
+        CharacterAttributes
+            memory charAttributes = tokenIdToCharacterAttributes[_tokenId];
 
         string memory strHp = Strings.toString(charAttributes.hp);
         string memory strMaxHp = Strings.toString(charAttributes.maxHp);
@@ -217,7 +164,9 @@ contract CharacterFactory is ERC721 {
         if (maxIdx > 0) {
             characterAttributes = new CharacterAttributes[](maxIdx);
             for (uint256 idx = 0; idx < maxIdx; idx += 1) {
-                characterAttributes[idx] = tokenIdToCharacterAttributes[tokenIds[idx]];
+                characterAttributes[idx] = tokenIdToCharacterAttributes[
+                    tokenIds[idx]
+                ];
             }
         }
         return characterAttributes;
@@ -233,5 +182,14 @@ contract CharacterFactory is ERC721 {
 
     function getCop() public view returns (Cop memory) {
         return cop;
+    }
+
+    function onERC721Received(
+        address,
+        address,
+        uint256,
+        bytes memory
+    ) public virtual override returns (bytes4) {
+        return this.onERC721Received.selector;
     }
 }

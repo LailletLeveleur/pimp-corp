@@ -1,0 +1,11 @@
+@import url('https:/com/fonts.googleapis./css?family=Gloria+Hallelujah');
+
+body {
+    font-family: 'Gloria Hallelujah';
+}
+
+connect-wallet-button {
+    top:5;
+    right:5;
+    position: fixed;
+}

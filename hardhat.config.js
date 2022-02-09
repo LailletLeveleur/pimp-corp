@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ganache");
+require('hardhat-abi-exporter');
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -19,7 +20,22 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 
  module.exports = {
-   solidity: '0.8.0',
+   solidity: {
+    version: "0.8.0",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 2000,
+        details: {
+          yul: true,
+          yulDetails: {
+            stackAllocation: true,
+            optimizerSteps: "dhfoDgvulfnTUtnIf"
+          }
+        }
+      }
+    },
+  },
    //defaultNetwork: "localhost",
    networks: {
     // localhost: {
@@ -36,5 +52,13 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
     }
    },
    
-
+   abiExporter: {
+    path: './webapp/src/abi',
+    runOnCompile: true,
+    only	: [],
+    clear: true,
+    flat: false,
+    spacing: 2,
+    pretty: false,
+  }
  };

@@ -1,9 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import './index.css';
 // import App from './App';
-import OnePageApp from './OnePageApp';
-ReactDOM.render(<OnePageApp />, document.getElementById('root'));
+// import OnePageAppBootstrap from './OnePageAppBootstrap';
+import PandemicNFT from './LifeGame/PandemicNFT';
+ReactDOM.render(<PandemicNFT />, document.getElementById('root'));
+// import MultiPLayerLifeGame from './LifeGame/MultiPlayerLifeGame.js';
+// ReactDOM.render(<MultiPLayerLifeGame />, document.getElementById('root'));
+// import LifeGame from './LifeGame/LifeGame';
+// ReactDOM.render(<LifeGame />, document.getElementById('root'));
+// ReactDOM.render(<OnePageAppBootstrap />, document.getElementById('root'));
 // ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
